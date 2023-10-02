@@ -1,0 +1,22 @@
+table {
+    border-collapse: collapse;
+    border: 3px solid black;
+    width: 95%;
+    margin-top: 20px;
+}
+
+
+td,
+th {
+    border: 1px solid #dddddd;
+    padding: 8px;
+    white-space: normal;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table-container{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 50px;
+}

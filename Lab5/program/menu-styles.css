@@ -1,0 +1,18 @@
+body,
+form {
+    display: flex;
+    flex-direction: column;
+    width: max-content;
+    background: rgb(235, 235, 235);
+}
+
+.title{
+    font-size: 50px;
+}
+
+select,
+input {
+    font-size: 30px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

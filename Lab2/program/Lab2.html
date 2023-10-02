@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab2</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/table.js"></script>
+    <script src="js/functions.js"></script>
+    <script src="js/variants.js"></script>
+    <script src="js/calculations.js"></script>
+</head>
+
+<body>
+    <div class="form">
+        <div class="one-line">
+            <p>Кількість рядків</p>
+            <input id="number-of-rows-input" class="input" type="text">
+        </div>
+        <div class="one-line">
+            <p>Кількість стовпчиків</p>
+            <input id="number-of-columns-input" class="input" type="text">
+        </div>
+        <div class="one-line">
+            <p>Варіант</p>
+            <select name="variants" id="variants"></select>
+        </div>
+    </div>
+    <div class="buttons">
+        <button onclick="create_matrix()">Побудувати матрицю</button>
+        <button onclick="calculate()">Розрахувати</button>
+    </div>
+    <div class="table-container" id="table-container"></div>
+    <script>
+        addOptionsToSelect();
+        handleTextInput();
+        handleSelectChange();      
+    </script>
+</body>
+
+</html>

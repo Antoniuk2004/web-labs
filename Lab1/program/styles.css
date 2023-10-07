@@ -93,12 +93,28 @@ body {
 
 .top-main-content .images img {
     border-radius: 20px;
-    width: 100%
+    width: 100%;
+    /* transition: transform 1s;  */
 }
 
-.top-main-content .images img:hover {
+.img1:hover {
+    transform-origin: top left;
     transform: scale(2);
-    transition: width 0.3s ease;
+}
+
+.img2:hover {
+    transform-origin: top right;
+    transform: scale(2);
+}
+
+.img3:hover {
+    transform-origin: bottom left;
+    transform: scale(2);
+}
+
+.img4:hover {
+    transform-origin: bottom right;
+    transform: scale(2);
 }
 
 .top-main-content .advertisement {

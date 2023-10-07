@@ -5,16 +5,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lab8</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="reset.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
 </head>
 
+<!-- https://rozetka.com.ua/search/?text=Energy+Drink -->
+
 <body>
-    <input class="product-input" id="product-input" type="text">
+    <div class="wrapper">
+        <form action="">
+            <input class="product-input" id="product-input" type="text">
+        </form>
+
+
+        <div id='response-div'>
+
+        </div>
+    </div>
 
     <script>
         let productInput = document.getElementById("product-input");
-        productInput.addEventListener("input", function (event) {
-            let value = event.currentTarget.value;
-            console.log(value);
+        productInput.addEventListener("input", function(event) {
+            const value = event.currentTarget.value;
+
+            let xhr = new XMLHttpRequest();
+
+            xhr.open("POST", `products.php?product=${value}`, true);
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    let responseDiv = document.getElementById("response-div");
+                    responseDiv.innerHTML = xhr.responseText;
+                } else if (xhr.status != 200) {
+                    console.log("Somethign went wrong");
+                }
+            };
+
+            let data = "product=" + encodeURIComponent(value);
+
+            xhr.send(data);
         });
     </script>
 </body>

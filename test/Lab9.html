@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab9</title>
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <h1>IP Lookup</h1>
+        <form>
+            <div class="input-container">
+                <input id="ip-adress-input" name="ip-adress" placeholder="IP adress" type="text">
+            </div>
+            <select name="" id="">
+                <option value="JSON">JSON</option>
+                <option value="XML">XML</option>
+            </select>
+            <button id="submit-button">IP Lookup</button>
+        </form>
+        <div class="ip-information">
+
+        </div>
+    </div>
+
+    <script>
+        let ip = "78.137.14.168";
+
+
+
+        $(document).ready(function () {
+
+            $("#submit-button").on("click", function () {
+                event.preventDefault();
+                $.post(
+                    "xml.php",
+                    $("form").serialize(),
+                    inputData
+                )
+            });
+
+            $("#ip-adress-input").keypress(function (event) {
+                if (event.which === 13) {
+                    console.log("Enter key pressed!");
+                }
+                else {
+                    console.log(event.key);
+                }
+            });
+        });
+
+        function inputData(data) {
+            console.log(data);
+            clearData();
+            
+            data = JSON.parse(data);
+
+            createPElement("IP details for " + data.ip, "regular");
+            createPElement("Geolocation Information", "special");
+            createPElement("Country Code: " + data.countryCode, "regular");
+            createFlagImage(data.flag);
+            createPElement("Country Name: " + data.countryName, "regular");
+            createPElement("Region Name: " + data.regionName, "regular");
+            createPElement("Region: " + data.region, "regular");
+            createPElement("City: " + data.cityName, "regular");
+            createPElement("Postal Code: " + data.postalCode, "regular");
+            createPElement("Latitude: " + data.lat, "regular");
+            createPElement("Longitude: " + data.lon, "regular");
+        }
+
+        function clearData(){
+            $(".ip-information").html("");
+        }
+
+        function createPElement(value, className) {
+            var pElement = $('<p>');
+            pElement.addClass(className);
+            pElement.html(value);
+            $(".ip-information").append(pElement);
+        }
+
+        function createFlagImage(value) {
+            var flagRowContainer = $('<div>');
+            flagRowContainer.addClass("flag-row-container");
+            $(".ip-information").append(flagRowContainer);
+            
+            var pElement = $('<p>');
+            pElement.html("Flag: ");
+            $(".flag-row-container").append(pElement);
+
+            var image = $('<img>');
+            image.attr('src', `images/${value}`);
+            $(".flag-row-container").append(image);
+        }
+    </script>
+</body>
+
+</html>

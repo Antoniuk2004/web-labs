@@ -5,49 +5,152 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lab8</title>
+    <link rel="stylesheet" href="loading.css">
+    <link rel="stylesheet" href="fonts/Helvetica/stylesheet.css">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="reset.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+    <script src='https://kit.fontawesome.com/e98af1ed48.js' crossorigin='anonymous'></script>
 </head>
 
-<!-- https://rozetka.com.ua/search/?text=Energy+Drink -->
-
 <body>
-    <div class="wrapper">
-        <form action="">
-            <input class="product-input" id="product-input" type="text">
-        </form>
+    <div id="lds-ring-container" class="lds-ring-container">
+        <div class="lds-ring">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
 
-
+    <div id="header" class="header content">
+        <div class="wrapper">
+            <div class="header-top">
+                <p class='logo'>ShopName</p>
+                <ul class='menu'>
+                    <li>Магазини</li>
+                    <li><span>Програма лояльності</span>&nbsp;<i class="fa-solid fa-chevron-down"></i></li>
+                    <li><span>Клієнтам</span>&nbsp;<i class="fa-solid fa-chevron-down"></i></li>
+                    <li><span>Сервіс</span>&nbsp;<i class="fa-solid fa-chevron-down"></i></li>
+                    <li style="color: #e64a19;">Акції</li>
+                </ul>
+                <div class="account-container">
+                    <div class='account'>
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                        &nbsp;
+                        <span>Увійти</span>
+                    </div>
+                </div>
+            </div>
+            <div class="header-bottom">
+                <button class='catalog-button'><i class="fa-solid fa-bars"></i>&nbsp;<span>Каталог
+                        товарів</span></button>
+                <div class='searchbar'>
+                    <input placeholder="Знайти..." class="product-input" id="product-input" type="text">
+                    <div class='magnifying-glass-container'>
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                </div>
+                <div class='shopping-cart-container'>
+                    <div class="shopping-cart">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span class='number-of-goods-in-cart'>0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="wrapper content">
         <div id='response-div'>
-
+            <div class="nothing-found">
+                <p>По вашому запиту нічого не знайдено.</p>
+            </div>
         </div>
     </div>
 
     <script>
-        let productInput = document.getElementById("product-input");
-        productInput.addEventListener("input", function(event) {
-            const value = event.currentTarget.value;
+        document.addEventListener('DOMContentLoaded', function () {
+            clearInput();
+            handleInput();
+        });
+        
+        handleHeaderMove();
+        
+        function handleInput() {
+            var productInput = document.getElementById("product-input");
+            productInput.addEventListener("input", function (event) {
+                const value = event.currentTarget.value;
+                renderData(value, 1);
+            });
+        }
 
-            let xhr = new XMLHttpRequest();
+        function clearInput() {
+            var productInput = document.getElementById("product-input");
+            productInput.value = "";
+        }
 
-            xhr.open("POST", `products.php?product=${value}`, true);
+        function renderData(value, pageNumber) {
+            var xhr = new XMLHttpRequest();
 
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    let responseDiv = document.getElementById("response-div");
-                    responseDiv.innerHTML = xhr.responseText;
-                } else if (xhr.status != 200) {
-                    console.log("Somethign went wrong");
+            xhr.open("GET", `products.php?pageNumber=${pageNumber}&name=${value}`, true);
+
+            switchPage("flex", "none");
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+                    switchPage("none", "flex");
+
+                    if (xhr.status == 200) {
+                        var responseDiv = document.getElementById("response-div");
+                        responseDiv.innerHTML = xhr.responseText;
+                    } else {
+                        console.log("Something went wrong");
+                    }
                 }
             };
 
-            let data = "product=" + encodeURIComponent(value);
+            xhr.send();
+        }
 
-            xhr.send(data);
-        });
+
+        function switchPage(first, second) {
+            var ringContainer = document.getElementById("lds-ring-container");
+            ringContainer.style.display = first;
+
+            var contentElements = document.getElementsByClassName("content");
+
+            for (var i = 0; i < contentElements.length; i++) {
+                contentElements[i].style.display = second;
+            }
+        }
+
+        function handleHeaderMove() {
+            document.addEventListener('DOMContentLoaded', function () {
+                var header = document.getElementById('header');
+                var headerOffset = header.offsetTop;
+
+                window.onscroll = function () {
+                    var goodsBlock = document.getElementById("goods-block");
+
+                    var height = header.offsetHeight;
+                    if (window.pageYOffset > headerOffset) {
+                        header.classList.add('fixed');
+                        goodsBlock.style = `margin-top: ${height}px`;
+                    } else {
+                        header.classList.remove('fixed');
+                        goodsBlock.style = "margin-top: 0px";
+                    }
+                };
+            });
+        }
+
+        function changePage(pageNumber) {
+            if (pageNumber) {
+                var productInput = document.getElementById("product-input");
+                var value = productInput.value;
+
+                renderData(value, pageNumber);
+            }
+        }
     </script>
 </body>
 
